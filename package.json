@@ -1,7 +1,7 @@
 {
   "name": "time-panto",
   "version": "0.1.0",
-  "description": "Display the elapsed execution time of panto tasks",
+  "description": "Display the elapsed execution time of panto",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -23,7 +23,7 @@
     "url": "https://github.com/pantojs/time-panto/issues"
   },
   "engines": {
-    "node": ">6.0.0"
+    "node": ">=6.0.0"
   },
   "homepage": "https://github.com/pantojs/time-panto#readme",
   "dependencies": {
@@ -34,6 +34,6 @@
     "text-table": "^0.2.0"
   },
   "devDependencies": {
-    "panto": "0.0.30"
+    "panto": "^0.0.30"
   }
 }
