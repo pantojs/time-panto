@@ -13,6 +13,7 @@
         "semi": 2
     },
     "globals": {
-        "panto": 1
+        "panto": 1,
+        "Map": 1
     }
 }

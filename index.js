@@ -4,9 +4,10 @@
  *
  * changelog
  * 2016-08-18[12:10:29]:revised
+ * 2016-09-01[19:48:13]:support multipart
  *
  * @author yanni4night@gmail.com
- * @version 0.1.0
+ * @version 0.2.0
  * @since 0.1.0
  */
 'use strict';
@@ -89,20 +90,27 @@ function formatTable(tableData, totalTime) {
 }
 
 module.exports = panto => {
-    let startTime;
-    let flows = {};
+    const taskMap = new Map();
 
-    panto.on('start', () => {
-        startTime = Date.now();
-        flows = {};
-    }).on('complete', () => {
-        const totalMs = Date.now() - startTime;
+    panto.on('start', buildId => {
+        const task = new Map();
+        task.set('startTime', Date.now());
+        taskMap.set(buildId, task);
+    }).on('complete', (files, buildId) => {
+        if (!taskMap.has(buildId)) {
+            return;
+        }
 
-        const data = Object.keys(flows).map(key => {
-            return [key, flows[key]];
+        const task = taskMap.get(buildId);
+        const flows = task.get('flows');
+
+        const totalMs = Date.now() - task.get('startTime');
+
+        const data = flows.map(flow => {
+            return [flow.get('name'), flow.get('endTime') - flow.get('startTime')];
         });
 
-        const startTimePretty = dateTime(new Date(startTime), {
+        const startTimePretty = dateTime(new Date(task.get('startTime')), {
             local: true
         });
 
@@ -110,11 +118,37 @@ module.exports = panto => {
         log(formatTable(data, totalMs) + '\n');
     }).on('flowstart', ({
         tag
-    }) => {
-        flows[tag] = Date.now();
+    }, flowId, buildId) => {
+        if (!taskMap.has(buildId)) {
+            return;
+        }
+
+        const task = taskMap.get(buildId);
+
+        if (!task.has('flows')) {
+            task.set('flows', []);
+        }
+        const flows = task.get('flows');
+        const flow = new Map();
+        flow.set('startTime', Date.now());
+        flow.set('flowId', flowId);
+        flow.set('name', tag);
+        flows.push(flow);
     }).on('flowend', ({
         tag
-    }) => {
-        flows[tag] = Date.now() - flows[tag];
+    }, flowId, buildId) => {
+        if (!taskMap.has(buildId)) {
+            return;
+        }
+
+        const task = taskMap.get(buildId);
+        const flows = task.get('flows');
+
+        for(let flow of flows){
+            if(flow.get('flowId') === flowId){
+                flow.set('endTime', new Date());
+                break;
+            }
+        }
     });
 };

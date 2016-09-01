@@ -1,6 +1,6 @@
 {
   "name": "time-panto",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Display the elapsed execution time of panto",
   "main": "index.js",
   "directories": {
@@ -34,6 +34,6 @@
     "text-table": "^0.2.0"
   },
   "devDependencies": {
-    "panto": "^0.0.30"
+    "panto": "^0.0.33"
   }
 }

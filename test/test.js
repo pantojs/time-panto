@@ -25,6 +25,6 @@ describe('time-panto', () => {
         panto.$('*.css').tag('css');
         panto.$('*.coffee').tag('coffee');
 
-        panto.build().then(() => done()).catch(e=>console.error(e));
+        panto.build().then(() => done()).catch(e => console.error(e));
     });
 });

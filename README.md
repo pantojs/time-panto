@@ -5,6 +5,8 @@ Display the elapsed execution time of panto, inspired by [time-grunt](https://ww
 
 **Note: _panto_ does NOT have tasks but streams. They are topological, only the names of header streams shows.**
 
+_v0.2.0_ requires panto>=0.0.33
+
 ```js
 require('time-panto')(panto);
 ```
